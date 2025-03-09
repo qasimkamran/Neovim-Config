@@ -1,0 +1,5 @@
+require("custom.autochdir")
+require("custom.blame")
+require("custom.gotodef")
+require("custom.remap")
+require("custom.set")
