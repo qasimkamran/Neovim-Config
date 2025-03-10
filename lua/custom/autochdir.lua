@@ -1,8 +1,30 @@
 local uv = vim.loop
-local file_path = vim.env.HOME .. "/.config/nvim/nvim_current_dir"
 local last_mtime = 0
 
+local function get_file_path()
+  local base_path = vim.env.HOME .. "/.config/nvim/nvim_current_dir/"
+  local bufs = vim.api.nvim_list_bufs()
+  for _, buf in ipairs(bufs) do
+    if vim.api.nvim_buf_is_loaded(buf) then
+      local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+      if ft == "toggleterm" then
+        local ok, job_id = pcall(vim.api.nvim_buf_get_var, buf, "terminal_job_id")
+        if ok and job_id then
+          local job_pid = vim.fn.jobpid(job_id)
+          if job_pid then
+            return base_path .. job_pid
+          end
+        end
+      end
+    end
+  end
+end
+
 local function update_cwd_from_terminal()
+    file_path = get_file_path()
+    if not file_path then
+      return
+    end
     -- Check for file existence and modification time
     local stat = uv.fs_stat(file_path)
     if not stat or stat.mtime.sec <= last_mtime then
