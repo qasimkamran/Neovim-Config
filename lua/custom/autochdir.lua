@@ -68,6 +68,11 @@ local function update_cwd_from_terminal()
     end
 end
 
-local timer = uv.new_timer()
-timer:start(0, 1000, vim.schedule_wrap(update_cwd_from_terminal))
+vim.api.nvim_create_user_command("AutoChDir", update_cwd_from_terminal, {})
+
+vim.api.nvim_create_autocmd("TermLeave", {
+    callback = function()
+        update_cwd_from_terminal()
+    end,
+})
 

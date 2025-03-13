@@ -31,6 +31,4 @@ vim.api.nvim_set_keymap('n', '<C-Up>', ':lua SwitchContext(true)<CR>', { noremap
 vim.api.nvim_set_keymap('n', '<C-Down>', ':lua SwitchContext(false)<CR>', { noremap = true, silent = true })
 
 vim.api.nvim_set_keymap('n', '<leader>hb', ':HgBlame<CR>', { noremap = true, silent = true })
-
 vim.api.nvim_set_keymap('n', '<leader>t', ':GotoDef<CR>', { noremap = true, silent = true })
-

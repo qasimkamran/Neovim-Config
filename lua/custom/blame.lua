@@ -39,6 +39,5 @@ local function toggle_hg_blame()
     print("hg blame applied")
 end
 
--- Create a user command and key mapping
 vim.api.nvim_create_user_command("HgBlame", toggle_hg_blame, {})
 

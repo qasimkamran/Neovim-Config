@@ -106,7 +106,7 @@ _G.packer_plugins = {
     url = "https://github.com/ojroques/nvim-osc52"
   },
   ["nvim-tree.lua"] = {
-    config = { "\27LJ\2\nÂ\2\0\0\6\0\19\0\0236\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\2B\0\2\0016\0\f\0009\0\r\0009\0\14\0'\2\15\0'\3\16\0'\4\17\0005\5\18\0B\0\5\1K\0\1\0\1\0\2\fnoremap\2\vsilent\2\24:NvimTreeToggle<CR>\14<leader>e\6n\20nvim_set_keymap\bapi\bvim\factions\14open_file\1\0\1\14open_file\0\1\0\1\17quit_on_open\1\ffilters\1\0\1\rdotfiles\2\tview\1\0\3\tview\0\factions\0\ffilters\0\1\0\2\nwidth\3\30\tside\tleft\nsetup\14nvim-tree\frequire\0" },
+    config = { "\27LJ\2\nÂ\2\0\0\6\0\19\0\0236\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\2B\0\2\0016\0\f\0009\0\r\0009\0\14\0'\2\15\0'\3\16\0'\4\17\0005\5\18\0B\0\5\1K\0\1\0\1\0\2\fnoremap\2\vsilent\2\24:NvimTreeToggle<CR>\14<leader>e\6n\20nvim_set_keymap\bapi\bvim\factions\14open_file\1\0\1\14open_file\0\1\0\1\17quit_on_open\1\ffilters\1\0\1\rdotfiles\2\tview\1\0\3\factions\0\ffilters\0\tview\0\1\0\2\tside\tleft\nwidth\3\30\nsetup\14nvim-tree\frequire\0" },
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
     url = "https://github.com/kyazdani42/nvim-tree.lua"
@@ -142,7 +142,7 @@ _G.packer_plugins = {
     url = "https://github.com/nvim-telescope/telescope.nvim"
   },
   ["toggleterm.nvim"] = {
-    config = { "\27LJ\2\n¯\1\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\a\tsize\3\f\14direction\15horizontal\20shade_terminals\2\19shading_factor\3\2\20start_in_insert\2\17open_mapping\n<F12>\17persist_size\2\nsetup\15toggleterm\frequire\0" },
+    config = { "\27LJ\2\n¯\1\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\a\17open_mapping\n<F12>\tsize\3\f\14direction\15horizontal\20start_in_insert\2\17persist_size\2\20shade_terminals\2\19shading_factor\3\2\nsetup\15toggleterm\frequire\0" },
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/toggleterm.nvim",
     url = "https://github.com/akinsho/toggleterm.nvim"
@@ -155,17 +155,17 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: toggleterm.nvim
-time([[Config for toggleterm.nvim]], true)
-try_loadstring("\27LJ\2\n¯\1\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\a\tsize\3\f\14direction\15horizontal\20shade_terminals\2\19shading_factor\3\2\20start_in_insert\2\17open_mapping\n<F12>\17persist_size\2\nsetup\15toggleterm\frequire\0", "config", "toggleterm.nvim")
-time([[Config for toggleterm.nvim]], false)
 -- Config for: github-nvim-theme
 time([[Config for github-nvim-theme]], true)
 try_loadstring("\27LJ\2\n|\0\0\3\0\6\0\v6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\0016\0\3\0009\0\4\0'\2\5\0B\0\2\1K\0\1\0*colorscheme github_dark_high_contrast\bcmd\bvim\nsetup\17github-theme\frequire\0", "config", "github-nvim-theme")
 time([[Config for github-nvim-theme]], false)
+-- Config for: toggleterm.nvim
+time([[Config for toggleterm.nvim]], true)
+try_loadstring("\27LJ\2\n¯\1\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\a\17open_mapping\n<F12>\tsize\3\f\14direction\15horizontal\20start_in_insert\2\17persist_size\2\20shade_terminals\2\19shading_factor\3\2\nsetup\15toggleterm\frequire\0", "config", "toggleterm.nvim")
+time([[Config for toggleterm.nvim]], false)
 -- Config for: nvim-tree.lua
 time([[Config for nvim-tree.lua]], true)
-try_loadstring("\27LJ\2\nÂ\2\0\0\6\0\19\0\0236\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\2B\0\2\0016\0\f\0009\0\r\0009\0\14\0'\2\15\0'\3\16\0'\4\17\0005\5\18\0B\0\5\1K\0\1\0\1\0\2\fnoremap\2\vsilent\2\24:NvimTreeToggle<CR>\14<leader>e\6n\20nvim_set_keymap\bapi\bvim\factions\14open_file\1\0\1\14open_file\0\1\0\1\17quit_on_open\1\ffilters\1\0\1\rdotfiles\2\tview\1\0\3\tview\0\factions\0\ffilters\0\1\0\2\nwidth\3\30\tside\tleft\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
+try_loadstring("\27LJ\2\nÂ\2\0\0\6\0\19\0\0236\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\2B\0\2\0016\0\f\0009\0\r\0009\0\14\0'\2\15\0'\3\16\0'\4\17\0005\5\18\0B\0\5\1K\0\1\0\1\0\2\fnoremap\2\vsilent\2\24:NvimTreeToggle<CR>\14<leader>e\6n\20nvim_set_keymap\bapi\bvim\factions\14open_file\1\0\1\14open_file\0\1\0\1\17quit_on_open\1\ffilters\1\0\1\rdotfiles\2\tview\1\0\3\factions\0\ffilters\0\tview\0\1\0\2\tside\tleft\nwidth\3\30\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
 time([[Config for nvim-tree.lua]], false)
 
 _G._packer.inside_compile = false
