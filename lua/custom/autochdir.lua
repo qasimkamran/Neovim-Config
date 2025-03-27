@@ -53,7 +53,6 @@ local function update_cwd_from_terminal()
         return
     end
 
-    -- Change directory and refresh any netrw windows
     vim.cmd("cd " .. vim.fn.fnameescape(new_dir))
     print("Working directory updated to: " .. new_dir)
 

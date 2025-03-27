@@ -14,14 +14,12 @@ function goto_definition()
             return
         end
 
-        -- If only one result is found, jump directly.
         if #result == 1 then
             local location = result[1].location or result[1].targetLocation
             if location then
                 vim.lsp.util.jump_to_location(location, "utf-8")
             end
         else
-            -- If multiple results are found, let the user choose one.
             vim.ui.select(result, {
                 prompt = "Select definition:",
                 format_item = function(item)
