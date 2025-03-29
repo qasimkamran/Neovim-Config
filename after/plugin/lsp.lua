@@ -49,16 +49,24 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- lua_ls for Lua files
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "lua" },
+-- Common lazy_setup
+local function lazy_setup(server_name, config, file_pattern)
+  local lspconfig = require('lspconfig')
+  vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+    pattern = file_pattern,
     callback = function()
-        require('lspconfig').lua_ls.setup({
-            on_attach = on_attach,
-            capabilities = default_capabilities,
-        })
+      if not lspconfig[server_name].manager then
+        lspconfig[server_name].setup(config)
+      end
     end,
-})
+  })
+end
+
+-- lua_ls for Lua files
+lazy_setup("lua_ls", {
+  on_attach = on_attach,
+  capabilities = default_capabilities,
+}, "*.lua")
 
 -- cssls for CSS/SCSS files
 vim.api.nvim_create_autocmd("FileType", {
@@ -71,109 +79,11 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
---- pyright helper code
-
-local util = require 'lspconfig.util'
-
-local root_files = {
-    'pyproject.toml',
-    'setup.py',
-    'setup.cfg',
-    'requirements.txt',
-    'Pipfile',
-    'pyrightconfig.json',
-    '.git',
-}
-
-local function organize_imports()
-    local params = {
-        command = 'pyright.organizeimports',
-        arguments = { vim.uri_from_bufnr(0) },
-    }
-
-    local clients = util.get_lsp_clients {
-        bufnr = vim.api.nvim_get_current_buf(),
-        name = 'pyright',
-    }
-    for _, client in ipairs(clients) do
-        client.request('workspace/executeCommand', params, nil, 0)
-    end
-end
-
-local function set_python_path(path)
-    local clients = util.get_lsp_clients {
-        bufnr = vim.api.nvim_get_current_buf(),
-        name = 'pyright',
-    }
-    for _, client in ipairs(clients) do
-        if client.settings then
-            client.settings.python = vim.tbl_deep_extend('force', client.settings.python, { pythonPath = path })
-        else
-            client.config.settings = vim.tbl_deep_extend('force', client.config.settings, { python = { pythonPath = path } })
-        end
-        client.notify('workspace/didChangeConfiguration', { settings = nil })
-    end
-end
-
-local function get_python_path(workspace)
-    local venv_names = { 'venv', '.venv', 'env', '.env' }
-    for _, venv in ipairs(venv_names) do
-        local venv_path = util.path.join(workspace, venv)
-        if util.path.exists(venv_path) then
-            local python_path = util.path.join(venv_path, 'bin', 'python3')
-            if util.path.exists(python_path) then
-                print(python_path)
-                return python_path
-            end
-        end
-    end
-end
-
 -- pyright for Py files
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "python" },
-    callback = function()
-        require('lspconfig').pyright.setup({
-            cmd = { 'pyright-langserver', '--stdio' },
-            root_dir = function(fname)
-                return util.root_pattern(
-                'pyproject.toml',
-                'setup.py',
-                'setup.cfg',
-                'requirements.txt',
-                'Pipfile',
-                'pyrightconfig.json',
-                '.git'
-                )(fname)
-                or util.find_git_ancestor(fname)
-                or vim.loop.cwd()
-            end,
-            single_file_support = true,
-            settings = {
-                python = {
-                    pythonPath = get_python_path(vim.fn.getcwd()),
-                    analysis = {
-                        autoSearchPaths = true,
-                        useLibraryCodeForTypes = true,
-                        diagnosticMode = 'openFilesOnly',
-                    },
-                },
-            },
-            commands = {
-                PyrightOrganizeImports = {
-                    organize_imports,
-                    description = 'Organize Imports',
-                },
-                PyrightSetPythonPath = {
-                    set_python_path,
-                    description = 'Reconfigure pyright with the provided python path',
-                    nargs = 1,
-                    complete = 'file',
-                },
-            },
-        })
-    end,
-})
+lazy_setup("pyright", {
+  on_attach = on_attach,
+  capabilities = default_capabilities,
+}, "*.py")
 
 -- Setup nvim-cmp for autocompletion
 local cmp = require('cmp')
