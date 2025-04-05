@@ -23,19 +23,15 @@ end
 -- Lazy-load LSP servers based on filetype via autocommands
 
 -- clangd for C/C++ files
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "c", "cpp", "h" },
-    callback = function()
-        require('lspconfig').clangd.setup({
-            cmd = { "clangd", "--compile-commands-dir=/home/data/dm1948/source" },
-            root_dir = function(fname)
-                local util = require("lspconfig.util")
-                return util.root_pattern("compile_commands.json", ".git")(fname) or util.path.dirname(fname)
-            end,
-            on_attach = on_attach,
-            capabilities = default_capabilities,
-        })
+local lspconfig = require('lspconfig')
+local util = require('lspconfig.util')
+lspconfig.clangd.setup({
+    cmd = { "clangd" },
+    root_dir = function(fname)
+        return util.root_pattern("compile_commands.json", ".git")(fname) or util.path.dirname(fname)
     end,
+    on_attach = on_attach,            -- Ensure on_attach is defined
+    capabilities = default_capabilities -- Ensure default_capabilities is defined
 })
 
 -- ts_ls for JavaScript/TypeScript
@@ -101,6 +97,14 @@ cmp.setup({
     experimental = {
         ghost_text = true,
     },
-    mapping = cmp.mapping.preset.insert({}),
+    mapping = cmp.mapping.preset.insert({
+        ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.confirm({ select = true })
+            else
+                fallback()
+            end
+        end, { 'i', 's' }),
+    }),
 })
 
