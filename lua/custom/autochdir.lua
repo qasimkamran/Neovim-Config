@@ -63,6 +63,11 @@ local function update_cwd_from_terminal()
                 vim.cmd("Rexplore")
             end)
             print("Netrw refreshed in window " .. win)
+        elseif vim.bo[buf].filetype == "NvimTree" then
+            vim.api.nvim_win_call(win, function()
+                vim.cmd("NvimTreeRefresh")
+            end)
+            print("NvimTree refreshed in window " .. win)
         end
     end
 end
