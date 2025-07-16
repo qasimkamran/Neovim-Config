@@ -1,3 +1,4 @@
+require("custom.hide_string_line")
 require("custom.autochdir")
 require("custom.blame")
 require("custom.gotodef")

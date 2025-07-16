@@ -30,3 +30,4 @@ vim.keymap.set('n', '<C-Down>', ':lua SwitchContext(false)<CR>', { noremap = tru
 
 vim.keymap.set('n', '<leader>hb', ':HgBlame<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>t', ':GotoDef<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>sl', ':HideStringLine<CR>', { noremap = true, silent = true })
