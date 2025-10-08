@@ -75,10 +75,24 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+local venv_python = vim.fn.getcwd() .. "/.venv/bin/python"
+local python_path
+
+if vim.fn.filereadable(venv_python) == 1 then
+    python_path = venv_python
+else
+    python_path = "/usr/bin/python3"
+end
+
 -- pyright for Py files
 lazy_setup("pyright", {
   on_attach = on_attach,
   capabilities = default_capabilities,
+  settings = {
+      python = {
+          pythonPath = python_path,
+    },
+  },
 }, "*.py")
 
 -- Setup nvim-cmp for autocompletion
