@@ -75,4 +75,6 @@ use {
 
 use('ojroques/nvim-osc52')
 
+use('~/Projects/Live-TPL/sharebuf_shm')
+
 end)

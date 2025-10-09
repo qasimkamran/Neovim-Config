@@ -31,3 +31,9 @@ vim.keymap.set('n', '<C-Down>', ':lua SwitchContext(false)<CR>', { noremap = tru
 vim.keymap.set('n', '<leader>hb', ':HgBlame<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>t', ':GotoDef<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>sl', ':HideStringLine<CR>', { noremap = true, silent = true })
+
+local shm = require("sharebuf_shm")
+
+vim.api.nvim_create_user_command("SendBufferSHM", function() shm.send_current_buffer() end, {})
+vim.api.nvim_create_autocmd("VimLeavePre", { callback = function() shm.close() end })
+
