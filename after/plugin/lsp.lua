@@ -16,96 +16,82 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
-    vim.keymap.set({'n', 'x'}, '<F3>', function() vim.lsp.buf.format({ async = true }) end, opts)
+    vim.keymap.set({ 'n', 'x' }, '<F3>', function() vim.lsp.buf.format({ async = true }) end, opts)
     vim.keymap.set('n', '<F4>', vim.lsp.buf.code_action, opts)
 end
 
--- Lazy-load LSP servers based on filetype via autocommands
+local function configure(server, overrides)
+    overrides = overrides or {}
+    overrides.on_attach = overrides.on_attach or on_attach
+    overrides.capabilities = overrides.capabilities or default_capabilities
+    vim.lsp.config(server, overrides)
+    vim.lsp.enable(server)
+end
 
 -- clangd for C/C++ files
-local lspconfig = require('lspconfig')
-local util = require('lspconfig.util')
-lspconfig.clangd.setup({
-    cmd = { "clangd" },
-    root_dir = function(fname)
-        return util.root_pattern("compile_commands.json", ".git")(fname) or util.path.dirname(fname)
+configure('clangd', {
+    cmd = { 'clangd' },
+    root_dir = function(bufnr, on_dir)
+        local fname = vim.api.nvim_buf_get_name(bufnr)
+        local root = vim.fs.root(fname, { 'compile_commands.json', '.git' })
+        on_dir(root or vim.fn.fnamemodify(fname, ':h'))
     end,
-    on_attach = on_attach,            -- Ensure on_attach is defined
-    capabilities = default_capabilities -- Ensure default_capabilities is defined
 })
 
 -- ts_ls for JavaScript/TypeScript
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "javascript", "typescript" },
-    callback = function()
-        require('lspconfig').ts_ls.setup({
-            on_attach = on_attach,
-            capabilities = default_capabilities,
-        })
-    end,
-})
-
--- Common lazy_setup
-local function lazy_setup(server_name, config, file_pattern)
-  local lspconfig = require('lspconfig')
-  vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
-    pattern = file_pattern,
-    callback = function()
-      if not lspconfig[server_name].manager then
-        lspconfig[server_name].setup(config)
-      end
-    end,
-  })
-end
+configure('ts_ls')
 
 -- lua_ls for Lua files
-lazy_setup("lua_ls", {
-  on_attach = on_attach,
-  capabilities = default_capabilities,
-}, "*.lua")
-
--- cssls for CSS/SCSS files
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "css", "scss" },
-    callback = function()
-        require('lspconfig').cssls.setup({
-            on_attach = on_attach,
-            capabilities = default_capabilities,
-        })
-    end,
+configure('lua_ls', {
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { 'vim' },
+            },
+            workspace = {
+                library = vim.api.nvim_get_runtime_file('', true),
+                checkThirdParty = false,
+            },
+            completion = {
+                callSnippet = 'Replace',
+            },
+            telemetry = { enable = false },
+        },
+    },
 })
 
-local venv_python = vim.fn.getcwd() .. "/.venv/bin/python"
+-- cssls for CSS/SCSS files
+configure('cssls')
+
+local venv_python = vim.fn.getcwd() .. '/.venv/bin/python'
 local python_path
 
 if vim.fn.filereadable(venv_python) == 1 then
     python_path = venv_python
 else
-    python_path = "/usr/bin/python3"
+    python_path = '/usr/bin/python3'
 end
 
 -- pyright for Py files
-lazy_setup("pyright", {
-  on_attach = on_attach,
-  capabilities = default_capabilities,
-  settings = {
-      python = {
-          pythonPath = python_path,
+configure('pyright', {
+    settings = {
+        python = {
+            pythonPath = python_path,
+        },
     },
-  },
-}, "*.py")
+})
 
 -- Setup nvim-cmp for autocompletion
 local cmp = require('cmp')
 cmp.setup({
     sources = {
         { name = 'nvim_lsp', max_item_count = 10 },
-        { name = 'buffer',    max_item_count = 10 },
-        { name = 'path',      max_item_count = 10 },
+        { name = 'buffer', max_item_count = 10 },
+        { name = 'path', max_item_count = 10 },
     },
     snippet = {
         expand = function(args)
-            vim.snippet.expand(args.body)  -- You need Neovim v0.10 to use vim.snippet
+            vim.snippet.expand(args.body)
         end,
     },
     experimental = {
@@ -124,10 +110,10 @@ cmp.setup({
 
 vim.diagnostic.config({
     virtual_text = {
-        prefix  = "●",
+        prefix = '●',
         spacing = 2,
     },
-    signs      = true,
-    underline  = true,
+    signs = true,
+    underline = true,
     update_in_insert = false,
 })

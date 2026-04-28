@@ -32,8 +32,16 @@ vim.keymap.set('n', '<leader>hb', ':HgBlame<CR>', { noremap = true, silent = tru
 vim.keymap.set('n', '<leader>t', ':GotoDef<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>sl', ':HideStringLine<CR>', { noremap = true, silent = true })
 
-local shm = require("sharebuf_shm")
-
-vim.api.nvim_create_user_command("SendBufferSHM", function() shm.send_current_buffer() end, {})
-vim.api.nvim_create_autocmd("VimLeavePre", { callback = function() shm.close() end })
-
+-- local shm = require("sharebuf_shm")
+--
+-- vim.api.nvim_create_autocmd("InsertCharPre", {
+--   callback = function() pcall(shm.send_current_buffer) end,
+-- })
+--
+-- vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+--   callback = function() pcall(shm.send_current_buffer) end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("VimLeavePre", {
+--   callback = function() pcall(shm.close) end,
+-- })

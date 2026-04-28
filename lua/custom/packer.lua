@@ -75,6 +75,102 @@ use {
 
 use('ojroques/nvim-osc52')
 
-use('~/Projects/Live-TPL/sharebuf_shm')
+-- use('~/Projects/Live-TPL/sharebuf_shm')
+
+use({
+    'MeanderingProgrammer/render-markdown.nvim',
+    after = { 'nvim-treesitter' },
+    requires = {
+        { 'nvim-mini/mini.nvim', opt = true },      -- if you use the mini.nvim suite
+        { 'nvim-mini/mini.icons', opt = true },     -- if you use standalone mini plugins
+    },
+    -- requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
+    config = function()
+        require('render-markdown').setup({
+            render_modes = { 'n', 'i', 'c', 't' },
+            heading = {
+                enabled = true,
+                render_modes = false,
+                sign = true,
+                icons = { '# ', '## ', '### ', '#### ', '##### ', '###### ' },
+                signs = { '> ' },
+                width = 'full',
+                border = false,
+                border_virtual = true,
+                border_prefix = false,
+                above = '-',
+                below = '-',
+                backgrounds = {
+                    'RenderMarkdownH1Bg',
+                    'RenderMarkdownH2Bg',
+                    'RenderMarkdownH3Bg',
+                    'RenderMarkdownH4Bg',
+                    'RenderMarkdownH5Bg',
+                    'RenderMarkdownH6Bg',
+                },
+                foregrounds = {
+                    'RenderMarkdownH1',
+                    'RenderMarkdownH2',
+                    'RenderMarkdownH3',
+                    'RenderMarkdownH4',
+                    'RenderMarkdownH5',
+                    'RenderMarkdownH6',
+                },
+            },
+            code = {
+                enabled = true,
+                render_modes = false,
+                sign = true,
+                style = 'full',
+            },
+            dash = { enabled = true },
+            bullet = { enabled = true },
+            checkbox = { enabled = true },
+            quote = { enabled = true },
+            link = { enabled = true },
+        })
+
+        vim.api.nvim_create_autocmd('FileType', {
+            pattern = 'markdown',
+            callback = function()
+                require('render-markdown').buf_enable()
+            end,
+        })
+
+        local function set_markdown_highlights()
+            local set = vim.api.nvim_set_hl
+
+            -- Headings: varied styles to simulate "size" hierarchy.
+            set(0, 'RenderMarkdownH1', { bold = true, underline = true })
+            set(0, 'RenderMarkdownH2', { bold = true })
+            set(0, 'RenderMarkdownH3', { bold = true, italic = true })
+            set(0, 'RenderMarkdownH4', { italic = true })
+            set(0, 'RenderMarkdownH5', { italic = true, undercurl = true })
+            set(0, 'RenderMarkdownH6', { italic = true })
+
+            -- Background accents for heading rows.
+            set(0, 'RenderMarkdownH1Bg', { link = 'DiffText' })
+            set(0, 'RenderMarkdownH2Bg', { link = 'DiffAdd' })
+            set(0, 'RenderMarkdownH3Bg', { link = 'DiffChange' })
+            set(0, 'RenderMarkdownH4Bg', { link = 'DiffDelete' })
+            set(0, 'RenderMarkdownH5Bg', { link = 'Visual' })
+            set(0, 'RenderMarkdownH6Bg', { link = 'CursorColumn' })
+
+            -- Inline styles.
+            set(0, '@markup.strong', { bold = true })
+            set(0, '@markup.emphasis', { italic = true })
+            set(0, '@markup.strikethrough', { strikethrough = true })
+
+            -- Code highlights.
+            set(0, 'RenderMarkdownCode', { link = 'ColorColumn' })
+            set(0, 'RenderMarkdownCodeInline', { link = 'Visual' })
+        end
+
+        set_markdown_highlights()
+        vim.api.nvim_create_autocmd('ColorScheme', {
+            callback = set_markdown_highlights,
+        })
+    end,
+})
 
 end)
