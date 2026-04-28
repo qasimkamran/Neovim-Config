@@ -1,3 +1,5 @@
+require("custom.treesitter_compat")
+require("custom.packer")
 require("custom.hide_string_line")
 require("custom.autochdir")
 require("custom.blame")

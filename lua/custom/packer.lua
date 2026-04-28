@@ -1,5 +1,7 @@
 vim.cmd [[packadd packer.nvim]]
 
+local has_nvim_010 = vim.fn.has('nvim-0.10') == 1
+
 return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
@@ -19,8 +21,11 @@ use({
 	end
 })
 
-use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
-use('nvim-treesitter/playground')
+use({
+	'nvim-treesitter/nvim-treesitter',
+	branch = 'main',
+	run = ':TSUpdate',
+})
 
 use "nvim-lua/plenary.nvim"
 use {
@@ -79,6 +84,7 @@ use('ojroques/nvim-osc52')
 
 use({
     'MeanderingProgrammer/render-markdown.nvim',
+    cond = has_nvim_010,
     after = { 'nvim-treesitter' },
     requires = {
         { 'nvim-mini/mini.nvim', opt = true },      -- if you use the mini.nvim suite
@@ -86,6 +92,10 @@ use({
     },
     -- requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
     config = function()
+        if not has_nvim_010 then
+            return
+        end
+
         require('render-markdown').setup({
             render_modes = { 'n', 'i', 'c', 't' },
             heading = {
